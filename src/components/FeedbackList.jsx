@@ -4,16 +4,19 @@ import FeedbackContext from "../context/FeedbackContext.jsx";
 import FeedbackItem from "./FeedbackItem.jsx";
 // import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
+import Spinner from "./shared/Spinner.jsx";
 
 function FeedbackList() {
   // Object from feedbackData.js
   // console.log(feedback);
-  const { feedback } = useContext(FeedbackContext);
-  if (!feedback || feedback.length === 0) {
+  const { feedback, isLoading } = useContext(FeedbackContext);
+  if ((!isLoading && !feedback) || feedback.length === 0) {
     return <p>No Feedback Yet 😉</p>;
   }
 
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className="feedback-list">
       <AnimatePresence>
         {feedback.map((item, index) => (

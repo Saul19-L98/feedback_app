@@ -1,33 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createContext } from "react";
 import { v4 as uuidv4 } from "uuid";
-import feedbackData from "../data/feedbackData.js";
 
 const FeedbackContext = createContext();
 
 export const FeedbackProvider = ({ children }) => {
-  const [feedback, setFeedback] = useState([
-    // {
-    //   id: 1,
-    //   text: "This item is from context",
-    //   rating: 10,
-    // },
-    {
-      id: 1,
-      rating: 10,
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. consequuntur vel vitae commodi alias voluptatem est voluptatum ipsa quae.",
-    },
-    {
-      id: 2,
-      rating: 9,
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. consequuntur vel vitae commodi alias voluptatem est voluptatum ipsa quae.",
-    },
-    {
-      id: 3,
-      rating: 8,
-      text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. consequuntur vel vitae commodi alias voluptatem est voluptatum ipsa quae.",
-    },
-  ]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [feedback, setFeedback] = useState([]);
 
   const [FeedbackEdit, setFeedbackEdit] = useState({
     item: {
@@ -35,6 +14,21 @@ export const FeedbackProvider = ({ children }) => {
       edit: false,
     },
   });
+
+  useEffect(() => {
+    FetchFeedback();
+  }, []);
+
+  //Fetch feedback
+  const FetchFeedback = async () => {
+    const response = await fetch(
+      `http://localhost:5000/feedback?_sort=id&_order=desc`
+    );
+    const data = await response.json();
+    // console.log(data);
+    setFeedback(data);
+    setIsLoading(false);
+  };
 
   //Delete Feedback
   const deleteFeedback = (id) => {
@@ -77,6 +71,7 @@ export const FeedbackProvider = ({ children }) => {
         editFeedback,
         FeedbackEdit,
         updateFeedback,
+        isLoading,
       }}
     >
       {children}

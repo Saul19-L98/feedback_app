@@ -9,14 +9,6 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
   },
-  devServer: {
-    watchFiles: ["src/**/*"],
-    port: 3000,
-    open: true,
-    hot: true,
-    compress: true,
-    historyApiFallback: true,
-  },
   module: {
     rules: [
       {
@@ -38,20 +30,6 @@ module.exports = {
         include: path.resolve(__dirname, "src"),
         use: ["style-loader", "css-loader"],
       },
-      {
-        test: /\.(eot|woff|woff2|ttf)$/i,
-        type: "asset/resource",
-        generator: {
-          filename: "assets/fonts/[hash][ext][query]",
-        },
-      },
-      {
-        test: /\.(svg|png)$/i,
-        type: "asset/resource",
-        generator: {
-          filename: "assets/img/[name][ext]",
-        },
-      },
     ],
   },
   plugins: [
@@ -61,7 +39,7 @@ module.exports = {
       filename: "./index.html",
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].css",
+      filename: "[hash].css",
     }),
   ],
 };
