@@ -39,6 +39,7 @@ function FeedbackForm() {
         addFeedback(newFeedback);
       }
       setText("");
+
       // NOTE: reset to default state after submission
       setBtnDisabled(true); // 👈  add this line to reset disabled
       setRating(10); //👈 add this line to set rating back to 10
@@ -57,7 +58,7 @@ function FeedbackForm() {
     <Card>
       <form onSubmit={handleSubmit}>
         <h2>How would you rate your service with us?</h2>
-        <RatingSelect select={(rating) => setRating(rating)} />
+        <RatingSelect select={setRating} selected={rating} />
         <div className="input-group">
           <input
             onChange={handleTextChange}
