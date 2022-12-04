@@ -30,6 +30,13 @@ module.exports = {
         include: path.resolve(__dirname, "src"),
         use: ["style-loader", "css-loader"],
       },
+      {
+        test: /\.(gif)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: "assets/img/[hash][ext]",
+        },
+      },
     ],
   },
   plugins: [

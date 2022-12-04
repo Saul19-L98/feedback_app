@@ -39,13 +39,6 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(eot|woff|woff2|ttf)$/i,
-        type: "asset/resource",
-        generator: {
-          filename: "assets/fonts/[hash][ext][query]",
-        },
-      },
-      {
         test: /\.(gif)$/i,
         type: "asset/resource",
         generator: {
