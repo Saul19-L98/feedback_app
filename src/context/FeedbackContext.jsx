@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 const FeedbackContext = createContext();
 
 export const FeedbackProvider = ({ children }) => {
+  const url = "http://localhost:5000/feedback";
   const [isLoading, setIsLoading] = useState(true);
   const [feedback, setFeedback] = useState([]);
 
@@ -21,9 +22,7 @@ export const FeedbackProvider = ({ children }) => {
 
   //Fetch feedback
   const FetchFeedback = async () => {
-    const response = await fetch(
-      `http://localhost:5000/feedback?_sort=id&_order=desc`
-    );
+    const response = await fetch(`${url}?_sort=id&_order=desc`);
     const data = await response.json();
     // console.log(data);
     setFeedback(data);
@@ -31,16 +30,33 @@ export const FeedbackProvider = ({ children }) => {
   };
 
   //Delete Feedback
-  const deleteFeedback = (id) => {
+  const deleteFeedback = async (id) => {
     if (window.confirm("Are you sure you want to delete ?")) {
+      //Delete method from json-server
+      await fetch(`${url}/${id}`, {
+        method: "DELETE",
+      });
+
       setFeedback(feedback.filter((item) => item.id !== id));
     }
   };
 
   //Add Feedback
-  const addFeedback = (newFeedback) => {
-    newFeedback.id = uuidv4();
-    setFeedback([newFeedback, ...feedback]);
+  const addFeedback = async (newFeedback) => {
+    //Old method, before adding json-server
+    // newFeedback.id = uuidv4();
+    // setFeedback([newFeedback, ...feedback]);
+
+    //New method with json-server
+    const response = await fetch(`${url}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newFeedback),
+    });
+    const data = await response.json();
+    setFeedback([data, ...feedback]);
   };
 
   //Set item to be updated
@@ -52,9 +68,17 @@ export const FeedbackProvider = ({ children }) => {
   };
 
   //Update freedback item
-  const updateFeedback = (id, updItem) => {
+  const updateFeedback = async (id, updItem) => {
+    const response = await fetch(`${url}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updItem),
+    });
+    const data = await response.json();
     setFeedback(
-      feedback.map((item) => (item.id === id ? { ...item, ...updItem } : item))
+      feedback.map((item) => (item.id === id ? { ...item, ...data } : item))
     );
     setFeedbackEdit({
       item: {},
