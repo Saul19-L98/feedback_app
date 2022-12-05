@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 const FeedbackContext = createContext();
 
 export const FeedbackProvider = ({ children }) => {
-  const url = "http://localhost:5000/feedback";
+  const url = "https://feedback-api-4m56.onrender.com/feedback";
   const [isLoading, setIsLoading] = useState(true);
   const [feedback, setFeedback] = useState([]);
 
